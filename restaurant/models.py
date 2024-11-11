@@ -129,3 +129,9 @@ class VisitedRestaurant(models.Model):
         return f"{self.user.username} visited {self.restaurant.title}"
 
 
+class RestaurantImage(models.Model):
+    restaurant=models.ForeignKey(Restaurant,on_delete=models.CASCADE,related_name='images')
+    image=models.ImageField(upload_to='restaurant_images/')
+
+    def __str__(self):
+        return f'Image for {self.restaurant.title}'
