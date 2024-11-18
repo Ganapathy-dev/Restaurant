@@ -1,5 +1,5 @@
 from django import forms
-from .models import CUISINE_CHOICES, FOOD_TYPES
+from .models import CUISINE_CHOICES, FOOD_TYPES,Review
 
 SORT_CHOICES=[
     ('','Order by ...'),
@@ -62,3 +62,13 @@ class RestaurantFilterForm(forms.Form):
         required=False,
         widget=forms.CheckboxInput(attrs={'class':'form-checkbox mt-1 block'})
     )
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model=Review
+        fields=['rating','comment']
+        widgets={
+            'rating':forms.NumberInput(attrs={'min':1,'max':5,'step':0.5}),
+            'comment':forms.Textarea(attrs={'placeholder':'Write your comment here . . .'}),
+        }
