@@ -1,6 +1,7 @@
 from django import forms
 from .models import CUISINE_CHOICES, FOOD_TYPES,Review
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 SORT_CHOICES=[
     ('','Order by ...'),
     ('rating','Rating'),
@@ -72,3 +73,9 @@ class ReviewForm(forms.ModelForm):
             'rating':forms.NumberInput(attrs={'min':1,'max':5,'step':0.5}),
             'comment':forms.Textarea(attrs={'placeholder':'Write your comment here . . .'}),
         }
+
+class UserRegistrationForm(UserCreationForm):
+    email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
+    class Meta:
+        model = User
+        fields = ('username','first_name','email', 'password1', 'password2')
