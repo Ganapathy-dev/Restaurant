@@ -36,4 +36,6 @@ urlpatterns=[
          name='password_change_done'
          ),
      path('profile/',views.UserProfileUpdateView.as_view(),name='user_profile'),
+     path('review/delete/<int:pk>/',views.ReviewDeleteView.as_view(),name='review_delete'),
+     path('review/edit/<int:pk>/',views.ReviewEditView.as_view(),name='review_edit'),
 ]

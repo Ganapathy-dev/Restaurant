@@ -1,8 +1,8 @@
-from django.views.generic import ListView,DetailView,UpdateView
+from django.views.generic import ListView,DetailView,UpdateView,DeleteView
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse,reverse_lazy
-from .models import Restaurant, BookmarkedRestaurant, VisitedRestaurant
+from .models import Restaurant, BookmarkedRestaurant, VisitedRestaurant, Review
 from django.contrib.auth.models import User
 from .forms import RestaurantFilterForm,ReviewForm,UserRegistrationForm
 from django.db.models.functions import Upper
@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.contrib.auth import login
 from django.views.generic.edit import FormView
+from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 class RestaurantListView(ListView):
@@ -165,4 +166,32 @@ class UserProfileUpdateView(LoginRequiredMixin,UpdateView):
     success_url=reverse_lazy('my_profile')
 
     def get_object(self):
-        return self.request.user
+        return self.request.user  
+class ReviewDeleteView(LoginRequiredMixin,DeleteView):
+
+    model=Review
+
+    def get_success_url(self):
+        return reverse_lazy('restaurant_detail',kwargs={'pk':self.object.restaurant.pk})
+
+    def get_object(self, queryset = None):
+        review=super().get_object(queryset)
+        if review.user != self.request.user:
+            raise PermissionDenied
+        return review
+
+    def get(self,request, *args,**kwargs):
+        self.object=self.get_object()
+        self.object.delete()
+        return redirect(self.get_success_url())
+    
+class ReviewEditView(LoginRequiredMixin, UpdateView):
+    model=Review
+    form_class=ReviewForm
+    template_name='restaurant/edit_review.html'
+
+    def get_success_url(self):
+        return reverse_lazy('restaurant_detail',kwargs={'pk':self.object.restaurant.pk})
+    
+    def get_queryset(self):
+        return Review.objects.filter(user=self.request.user)

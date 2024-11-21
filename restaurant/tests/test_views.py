@@ -1,11 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse,resolve
 from ..models import Restaurant,Dish,Review
-from ..views import RestaurantListView,RestaurantDetailView
+from ..views import RestaurantListView,RestaurantDetailView,ReviewDeleteView,ReviewEditView
 from ..forms import RestaurantFilterForm,ReviewForm
 from django.contrib.auth.models import User
 from unittest.mock import patch
 from datetime import time,datetime
+from django.core.exceptions import PermissionDenied
 
 class RestaurantListViewTests(TestCase):
     @classmethod
@@ -211,5 +212,88 @@ class ToggleVisistedViewTests(DetailViewTestDataSetUp):
         response = self.client.post(reverse('toggle_visited', kwargs={'restaurant_id': self.testrestaurant.id}))
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {'is_visited': False})
+
+class DeleteReviewViewTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.testuser1=User.objects.create_user(username='testuser1',email='testuser1@gmail.com',password='user1@123')
+        cls.testuser2=User.objects.create_user(username='testuser2',email='testuser2@gmail.com',password='user2@123')
+        cls.testuser3=User.objects.create_user(username='testuser3',email='testuser3@gmail.com',password='user3@123')
+
+        cls.testrestaurant=Restaurant.objects.create(
+            title='testrestaurant',owner=cls.testuser1,location='City A', food_type=['veg','non_veg','vegan'], rating=4.5, cost_of_two=500, open_time='10:00', close_time='20:00'
+        )
+        cls.testreview=Review.objects.create(
+            restaurant=cls.testrestaurant, user=cls.testuser2, rating=4, comment="nice hotel to have all varities of food"
+        )        
+
+    def test_delete_review_url_resolves_delete_review_view(self):
+        view=resolve(f'/review/delete/{self.testreview.id}/')
+        self.assertEqual(view.func.view_class,ReviewDeleteView)
+
+    def test_anonymous_user_redirect_to_login(self):
+        response=self.client.get(reverse('review_delete',kwargs={'pk':self.testreview.pk}))
+        self.assertRedirects(response,f"{reverse('user_login')}?next={reverse('review_delete',kwargs={'pk':self.testreview.pk})}")
+        self.testreview.refresh_from_db()
+        self.assertTrue(self.testrestaurant.reviews.filter(user=self.testuser2).exists())
+    
+    def test_user_cannot_delete_other_user_reviews(self):
+        self.client.login(username='testuser3',password='user3@123')
+        response=self.client.get(reverse('review_delete',kwargs={'pk':self.testreview.pk}))
+        self.assertEqual(response.status_code,403)
+        self.testreview.refresh_from_db()
+        self.assertTrue(self.testrestaurant.reviews.filter(user=self.testuser2).exists())
+    
+    def test_valid_user_successful_deltion(self):
+        self.client.login(username='testuser2',password='user2@123')
+        response=self.client.get(reverse('review_delete',kwargs={'pk':self.testreview.pk}))
+        self.assertRedirects(response,reverse('restaurant_detail',kwargs={'pk':self.testrestaurant.id}))
+        self.assertFalse(Review.objects.filter(user=self.testuser2).exists())
+
+class EditReviewViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.testuser1=User.objects.create_user(username='testuser1',email='testuser1@gmail.com',password='user1@123')
+        cls.testuser2=User.objects.create_user(username='testuser2',email='testuser2@gmail.com',password='user2@123')
+        # cls.testuser3=User.objects.create_user(username='testuser3',email='testuser3@gmail.com',password='user3@123')
+
+        cls.testrestaurant=Restaurant.objects.create(
+            title='testrestaurant',owner=cls.testuser1,location='City A', food_type=['veg','non_veg','vegan'], rating=4.5, cost_of_two=500, open_time='10:00', close_time='20:00'
+        )
+        cls.testreview=Review.objects.create(
+            restaurant=cls.testrestaurant, user=cls.testuser2, rating=4, comment="nice hotel to have all varities of food"
+        )
+
+    def test_edit_review_url_resolves_edit_review_view(self):
+        view=resolve(f'/review/edit/{self.testreview.id}/')
+        self.assertEqual(view.func.view_class,ReviewEditView)
+    
+    def test_edit_review_view_uses_correct_template(self):
+        self.client.login(username='testuser2',password='user2@123')
+        response=self.client.get(reverse('review_edit',kwargs={'pk':self.testreview.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,'restaurant/review_edit.html')
+    
+    def test_edit_review_page_contains_correct_contents(self):
+        self.client.login(username='testuser2',password='user2@123')
+        response=self.client.get(reverse('review_edit',kwargs={'pk':self.testreview.id}))
+        self.assertEqual(response.status_code, 200)
+        form=response.context['form']
+        self.assertEqual(form.initial['comment'],"nice hotel to have all varities of food")
+        self.assertEqual(form.initial['rating'],4)
+    
+    def test_edit_review_view_update_content(self):
+        self.client.login(username='testuser2',password='user2@123')
+        response=self.client.post(reverse('review_edit',kwargs={'pk':self.testreview.id}),{
+            'rating':3,
+            'comment':"this is the testing comment for testcase"
+        })
+        self.assertRedirects(response,reverse('restaurant_detail',kwargs={'pk':self.testreview.restaurant.id}))
+        self.testreview.refresh_from_db()
+        review=Review.objects.get(user=self.testuser2)
+        self.assertEqual(review.rating,self.testreview.rating)
+        self.assertEqual(review.comment,self.testreview.comment)
+        
 
 

@@ -6,7 +6,7 @@
 
 <div class="w-full flex">
 
-    <div class="w-[70%] flex flex-col px-4 h-screen overflow-auto pb-[50px]">
+    <div class="w-[75%] flex flex-col px-4 h-screen overflow-auto pb-[50px]">
 
         <div class="flex justify-center">
             <div x-data="{            
@@ -329,6 +329,14 @@
                 {% endif %}
                 <div>{{ review.updated_at | naturaltime }}</div>
             </div>
+
+            {% if user.is_authenticated and user.get_username == review.user.username %}
+            <div class="flex gap-2 text-xl ml-4 self-end">
+                <a href="{% url 'review_edit' review.pk %}"><div class="hover:text-2xl p-2"><i class="fa-regular fa-pen-to-square" style="color: #323941;"></i></div></a>
+                <a href="{% url 'review_delete' review.pk %}"><div class="hover:text-2xl p-2"><i class="fa-regular fa-trash-can" style="color: #fa5252;"></i></div></a>
+            </div>
+            {% endif %}
+
             </div>
 
             <!--Rating-->
@@ -386,7 +394,7 @@
      </div>
 
 
-     <div class="w-[30%] h-screen overflow-auto restaurant-detail border-l border-[#323941] bg-white fixed right-0 pb-[100px]">
+     <div class="w-[25%] h-screen overflow-auto restaurant-detail border-l border-gray-300 bg-white fixed right-0 pb-[100px]">
         <div class="flex justify-center items-center font-bold text-xl w-full h-12 border-b border-gray-200">M E N U</div>
 
         <!--Veg-->
