@@ -1,4 +1,4 @@
-from django.views.generic import ListView,DeleteView,UpdateView
+from django.views.generic import ListView,DetailView,UpdateView
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse,reverse_lazy
@@ -84,7 +84,7 @@ class RestaurantListView(ListView):
         return context
     
 
-class RestaurantDetailView(DeleteView):
+class RestaurantDetailView(DetailView):
      model=Restaurant
      template_name='restaurant/restaurant_detail.html'
      context_object_name='restaurant'
