@@ -12,13 +12,13 @@ class RestaurantListViewTests(TestCase):
     def setUpTestData(cls):
         cls.testuser=User.objects.create_user(username='testuser1',email='testuser1@gmail.com',password='user1@123')
         Restaurant.objects.create(
-            title='Restaurant A',owner=cls.testuser,location='City A', food_type='veg', rating=4.5, cost_of_two=500, open_time='10:00', close_time='20:00'
+            title='Restaurant A',owner=cls.testuser,location='City A', food_type='veg', rating=4.5, cost_of_two=500, open_time=time(9,0), close_time=time(22,0)
         )
         Restaurant.objects.create(
-            title='Restaurant B',owner=cls.testuser, location='City B', food_type='non_veg', rating=3.8, cost_of_two=700, open_time='11:00', close_time='20:00'
+            title='Restaurant B',owner=cls.testuser, location='City B', food_type='non_veg', rating=3.8, cost_of_two=700, open_time=time(10,0), close_time=time(22,0)
         )
         Restaurant.objects.create(
-            title='Restaurant C',owner=cls.testuser, location='City A', food_type='veg', rating=4.9, cost_of_two=1000, open_time='09:00', close_time='23:00'
+            title='Restaurant C',owner=cls.testuser, location='City A', food_type='veg', rating=4.9, cost_of_two=1000, open_time=time(11,0), close_time=time(23,0)
         )
 
     def test_restaurant_list_url_resolves_restaurant_list_view(self):
@@ -61,20 +61,20 @@ class RestaurantListViewTests(TestCase):
         self.assertEqual(len(response.context['restaurants']), 2)
 
     def test_sort_by_rating(self):
-        response = self.client.get(reverse('restaurant_list'), {'sort_by': 'rating', 'sort_order': 'high to low'})
+        response = self.client.get(reverse('restaurant_list'), {'sort_by': '-rating'})
         restaurants = response.context['restaurants']
         self.assertEqual(float(restaurants[0].rating), 4.9) 
         self.assertEqual(float(restaurants[1].rating),4.5)
     
     def test_sort_by_cost(self):
-        response = self.client.get(reverse('restaurant_list'), {'sort_by': 'cost_of_two', 'sort_order': 'low to high'})
+        response = self.client.get(reverse('restaurant_list'), {'sort_by': 'cost_of_two'})
         restaurants = response.context['restaurants']
         self.assertEqual(restaurants[0].cost_of_two, 500)
         self.assertEqual(restaurants[1].cost_of_two,700)
 
     def test_filter_by_is_open(self):
         with patch('django.utils.timezone.now',return_value=datetime(2024,1,1,22,30)):
-            response = self.client.get(reverse('restaurant_list'), {'is_open': True})
+            response = self.client.get(reverse('restaurant_list'), {'is_open':'on'})
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(response.context['restaurants']), 1)
 
