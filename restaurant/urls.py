@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns=[
-    path('',views.RestaurantListView.as_view(),name='restaurant_list'),
+    path('restaurants/',views.RestaurantListView.as_view(),name='restaurant_list'),
     path('<int:pk>/',views.RestaurantDetailView.as_view(),name='restaurant_detail'),
     path('bookmark/<int:restaurant_id>/',views.ToggleBookmarkView.as_view(),name='toggle_bookmark'),
     path('visited/<int:restaurant_id>/',views.ToggleVisitedView.as_view(),name='toggle_visited'),
@@ -41,4 +41,5 @@ urlpatterns=[
      path('bookmarked/restaurants/',views.BookmarkedRestaurantsView.as_view(),name='bookmarked_restaurants'),
      path('visited/restaurants/',views.VisitedRestaurantsView.as_view(),name='visited_restaurants'),
      path('spotlight/restaurants/',views.SpotlightRestaurantView.as_view(),name='spotlight_restaurants'),
+     path('',views.HomeView.as_view(),name='home')
 ]

@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse,resolve
 from ..models import Restaurant,Dish,Review,BookmarkedRestaurant,VisitedRestaurant
-from ..views import RestaurantListView,RestaurantDetailView,ReviewDeleteView,ReviewEditView,BookmarkedRestaurantsView,VisitedRestaurantsView,SpotlightRestaurantView
+from ..views import RestaurantListView,RestaurantDetailView,ReviewDeleteView,ReviewEditView
+from ..views import BookmarkedRestaurantsView,VisitedRestaurantsView,SpotlightRestaurantView,HomeView
 from ..forms import RestaurantFilterForm,ReviewForm
 from django.contrib.auth.models import User
 from unittest.mock import patch
@@ -23,7 +24,7 @@ class RestaurantListViewTests(TestCase):
         )
 
     def test_restaurant_list_url_resolves_restaurant_list_view(self):
-        view=resolve('/')
+        view=resolve('/restaurants/')
         self.assertEqual(view.func.view_class,RestaurantListView)
     
     def test_view_uses_correct_template(self):
@@ -427,5 +428,19 @@ class SpotlightRestaurantsViewTests(TestCase):
         self.assertEqual(restaurants[0].title,'Restaurant A')
         self.assertEqual(restaurants[1].title,'Restaurant C')
         self.assertContains(self.response,'Spotlight Restaurants')
-  
+    
+class HomeViewTests(TestCase):
+
+    def test_homepage_use_correct_template(self):
+        response=self.client.get(reverse('home'))
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'restaurant/home.html')
+    
+    def test_homepage_resolve_home_view(self):
+        view=resolve('/')
+        self.assertEqual(view.func.view_class,HomeView)
+
+    def test_homepage_receives_restaurants_context(self):
+        response=self.client.get(reverse('home'))
+        self.assertIn('restaurants',response.context)
 

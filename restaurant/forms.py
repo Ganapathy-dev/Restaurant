@@ -7,7 +7,7 @@ SORT_CHOICES=[
     ('rating','Rating'),
     ('-rating','Rating (High to low)'),
     ('cost_of_two','Cost of two'),
-    ('-cost_of_two','Cost of two (Hight to low)')
+    ('-cost_of_two','Cost of two (High to low)')
 ]
 
 class RestaurantFilterForm(forms.Form):

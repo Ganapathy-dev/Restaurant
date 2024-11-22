@@ -1,4 +1,4 @@
-from django.views.generic import ListView,DetailView,UpdateView,DeleteView
+from django.views.generic import ListView,DetailView,UpdateView,DeleteView,TemplateView
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse,reverse_lazy
@@ -112,10 +112,11 @@ class UserProfileUpdateView(LoginRequiredMixin,UpdateView):
     model=User
     fields=('first_name','last_name','email',)
     template_name='accounts/user_profile.html'
-    success_url=reverse_lazy('my_profile')
+    success_url=reverse_lazy('user_profile')
 
     def get_object(self):
-        return self.request.user  
+        return self.request.user
+
 class ReviewDeleteView(LoginRequiredMixin,DeleteView):
 
     model=Review
@@ -184,4 +185,12 @@ class SpotlightRestaurantView(ListView):
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         context['spotlight']=True
+        return context
+    
+class HomeView(TemplateView):
+    template_name='restaurant/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['restaurants'] = Restaurant.objects.order_by('-rating')[:4]
         return context
