@@ -44,10 +44,10 @@
 
                 <div class=" md:flex space-x-10 text-base font-semibold text-white">
                     <a href="{% url 'restaurant_list' %}" class="text-white hover:text-gray-300">Restaurants</a> 
-                    <a href="#" class="text-white hover:text-gray-300">Spotlights</a> 
+                    <a href="{% url 'spotlight_restaurants' %}" class="text-white hover:text-gray-300">Spotlights</a> 
                     {% if user.is_authenticated %}
-                    <a href="#" class="text-white hover:text-gray-300">BookMarked</a> 
-                    <a href="#" class="text-white hover:text-gray-300">Visited</a>
+                    <a href="{% url 'bookmarked_restaurants' %}" class="text-white hover:text-gray-300">BookMarked</a> 
+                    <a href="{% url 'visited_restaurants' %}" class="text-white hover:text-gray-300">Visited</a>
                     {% endif %}
                 </div>
 

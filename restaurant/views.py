@@ -144,3 +144,44 @@ class ReviewEditView(LoginRequiredMixin, UpdateView):
     
     def get_queryset(self):
         return Review.objects.filter(user=self.request.user)
+    
+class BookmarkedRestaurantsView(LoginRequiredMixin,ListView):
+    model=Restaurant
+    template_name='restaurant/list_restaurants.html'
+    context_object_name='restaurants'
+
+    def get_queryset(self):
+        book_marked=BookmarkedRestaurant.objects.filter(user=self.request.user).select_related('restaurant').values_list('restaurant',flat=True)
+        return Restaurant.objects.filter(id__in=book_marked)
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['bookmarked']=True
+        return context
+    
+class VisitedRestaurantsView(LoginRequiredMixin,ListView):
+    model=Restaurant
+    template_name='restaurant/list_restaurants.html'
+    context_object_name='restaurants'
+
+    def get_queryset(self):
+        visited=VisitedRestaurant.objects.filter(user=self.request.user).select_related('restaurant').values_list('restaurant',flat=True)
+        return Restaurant.objects.filter(id__in=visited)
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['visited']=True
+        return context
+    
+class SpotlightRestaurantView(ListView):
+    model=Restaurant
+    template_name='restaurant/list_restaurants.html'
+    context_object_name='restaurants'
+
+    def get_queryset(self):
+        return Restaurant.objects.filter(is_spotlight=True)
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['spotlight']=True
+        return context

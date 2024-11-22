@@ -38,4 +38,7 @@ urlpatterns=[
      path('profile/',views.UserProfileUpdateView.as_view(),name='user_profile'),
      path('review/delete/<int:pk>/',views.ReviewDeleteView.as_view(),name='review_delete'),
      path('review/edit/<int:pk>/',views.ReviewEditView.as_view(),name='review_edit'),
+     path('bookmarked/restaurants/',views.BookmarkedRestaurantsView.as_view(),name='bookmarked_restaurants'),
+     path('visited/restaurants/',views.VisitedRestaurantsView.as_view(),name='visited_restaurants'),
+     path('spotlight/restaurants/',views.SpotlightRestaurantView.as_view(),name='spotlight_restaurants'),
 ]
