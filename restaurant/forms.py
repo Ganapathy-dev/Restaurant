@@ -4,12 +4,9 @@ from .models import CUISINE_CHOICES, FOOD_TYPES,Review
 SORT_CHOICES=[
     ('','Order by ...'),
     ('rating','Rating'),
-    ('cost_of_two','Cost_of_two')
-]
-
-SORT_ORDER_CHOICES=[
-    ('high to low','High -> Low'),
-    ('low to high','Low -> High')
+    ('-rating','Rating (High to low)'),
+    ('cost_of_two','Cost of two'),
+    ('-cost_of_two','Cost of two (Hight to low)')
 ]
 
 class RestaurantFilterForm(forms.Form):
@@ -17,12 +14,7 @@ class RestaurantFilterForm(forms.Form):
     sort_by=forms.CharField(label='Sort',
                             required=False,
                             widget=forms.Select(choices=SORT_CHOICES))
-    
-    sort_order=forms.CharField(label='Oder',
-                               required=False,
-                               widget=forms.RadioSelect(choices=SORT_ORDER_CHOICES,
-                                                        attrs={'class':'form-radio mt-1 block'}
-                                                        ))
+
     
      # Filter fields
 
