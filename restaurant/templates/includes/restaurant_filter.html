@@ -120,16 +120,6 @@
                         </option>
                     {% endfor %}
                 </select>
-
-                    <div class="flex flex-col justify-center gap-4 p-4">
-                        {% for choice in form.sort_order %}
-                            <label class="inline-flex items-center">
-                                {{ choice.tag }}
-                                <span>&nbsp;&nbsp;{% if choice.choice_label == "High -> Low"%}<i class="fa-solid fa-arrow-trend-up" style="color: #323941;"></i>{% else %}<i class="fa-solid fa-arrow-trend-down" style="color: #323941;"></i>{% endif %}&nbsp;&nbsp;(&nbsp;{{ choice.choice_label }}&nbsp;)</span>
-                            </label>
-                        {% endfor %}
-                    </div>
-                
             </div>
         </div>
     </div>
@@ -146,7 +136,7 @@
 
     <!-- Submit Button -->
     <div class="flex justify-center items-center">
-        <button type="submit" class="w-[80%] py-3 bg-[#92B53D] hover:bg-[#A7C95A] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <button type="submit" class="w-[80%] py-3 bg-[#92B53D] hover:bg-[#A7C95A] text-white rounded-lg ">
             Apply Filters
         </button>
     </div>
