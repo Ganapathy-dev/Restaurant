@@ -1,7 +1,7 @@
 import django_filters 
 from django.db.models import Q,F
 from .models import Restaurant
-from django.utils.timezone import now
+from django.utils import timezone
 
 
 class RestaurantFilter(django_filters.FilterSet):
@@ -43,7 +43,7 @@ class RestaurantFilter(django_filters.FilterSet):
     
     def filter_is_open(self, queryset, name, value):
         if value == 'on':
-            current_time = now().time()
+            current_time=timezone.now().time()
             queryset=queryset.filter(
                 Q(open_time__lte=current_time, close_time__gte=current_time) |
                 Q(open_time__gte=F('close_time')),

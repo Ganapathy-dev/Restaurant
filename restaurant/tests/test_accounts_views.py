@@ -17,7 +17,7 @@ class UserRegistrationViewTests(TestCase):
     def test_view_uses_correct_template(self):
         response=self.client.get(reverse('user_registration'))
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,'restaurant/user_registration.html')
+        self.assertTemplateUsed(response,'accounts/user_registration.html')
 
     
     def test_valid_user_registration(self):
@@ -61,7 +61,7 @@ class UserLoginViewTests(TestCase):
     def test_login_page_uses_correct_template(self):
         response=self.client.get(reverse('user_login'))
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,'restaurant/user_login.html')
+        self.assertTemplateUsed(response,'accounts/user_login.html')
 
     def test_valid_user_login(self):
         response=self.client.post(reverse('user_login'),{
@@ -97,7 +97,7 @@ class PasswordResetViewTests(TestCase):
     
     def test_password_reset_page_use_correct_template(self):
         self.assertEqual(self.response.status_code,200)
-        self.assertTemplateUsed(self.response,'restaurant/password_reset.html')
+        self.assertTemplateUsed(self.response,'accounts/password_reset.html')
 
     def test_password_reset_url_resolves_password_reset_view(self):
         view=resolve('/password_reset/')
@@ -126,7 +126,7 @@ class PasswordResetDoneViewTests(TestCase):
     
     def test_view_use_correct_template(self):
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response,'restaurant/password_reset_done.html')
+        self.assertTemplateUsed(self.response,'accounts/password_reset_done.html')
     
     def test_page_resloves_correct_view(self):
         view=resolve('/password_reset/done/')
@@ -147,7 +147,7 @@ class PasswordResetConfirmViewTests(TestCase):
     def test_password_confirm_page_use_correct_template(self):
         response=self.client.get(self.valid_url,follow=True)
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,'restaurant/password_reset_confirm.html')
+        self.assertTemplateUsed(response,'accounts/password_reset_confirm.html')
 
     def test_password_confirm_url_resolves_password_confirm_view(self):
         view=resolve('/password_reset/<uidb64>/<token>/')
@@ -191,7 +191,7 @@ class PasswordResetCompleteViewTests(TestCase):
     
     def test_view_use_correct_template(self):
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response,'restaurant/password_reset_complete.html')
+        self.assertTemplateUsed(self.response,'accounts/password_reset_complete.html')
     
     def test_page_resloves_correct_view(self):
         view=resolve('/password_reset/complete/')
@@ -215,7 +215,7 @@ class PasswordChangeViewTests(TestCase):
     def test_view_use_correct_template(self):
         response=self.client.get(reverse('password_change'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,'restaurant/password_change.html')
+        self.assertTemplateUsed(response,'accounts/password_change.html')
     
     def test_page_resloves_correct_view(self):
         view=resolve('/password_change/')
@@ -253,7 +253,7 @@ class UserProfileViewTests(TestCase):
     
     def test_view_use_correct_template(self):
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response,'restaurant/user_profile.html')
+        self.assertTemplateUsed(self.response,'accounts/user_profile.html')
     
     def test_page_resloves_correct_view(self):
         view=resolve('/profile/')
