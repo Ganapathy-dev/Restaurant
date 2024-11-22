@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
+from .filters import RestaurantFilter
 from django.contrib.auth import login
 from django.views.generic.edit import FormView
 from django.core.exceptions import PermissionDenied
@@ -19,64 +20,12 @@ class RestaurantListView(ListView):
     model=Restaurant
     template_name='restaurant/restaurant_list.html'
     context_object_name='restaurants'
-
-    def collectformdata(self):
-            self.city=self.form.cleaned_data.get('city')
-            self.food_type=self.form.cleaned_data.get('food_type')
-            self.cuisines=self.form.cleaned_data.get('cuisines')
-            self.rating=self.form.cleaned_data.get('rating')
-            self.cost_of_two=self.form.cleaned_data.get('cost_of_two')
-            self.is_open=self.form.cleaned_data.get('is_open')
-            self.sort_by=self.form.cleaned_data.get('sort_by')
-        
-    def filterqueryset(self):
-            if self.city:
-                self.queryset=self.queryset.filter(location__icontains=self.city)
-
-            if self.food_type:
-                query=Q()
-                for type in self.food_type:
-                     query |= Q(food_type__iregex=rf'(^|,){type}(,|$)')
-                self.queryset=self.queryset.filter(query)
-
-            if self.cuisines:
-                query=Q()
-                for cuisine in self.cuisines:
-                    query |=Q(cuisines__icontains=cuisine)
-                self.queryset=self.queryset.filter(query)
-            
-            if self.rating:
-                self.queryset=self.queryset.filter(rating__gte=self.rating)
-
-            if self.cost_of_two:
-                self.queryset=self.queryset.filter(cost_of_two__gte=self.cost_of_two)
-
-            if self.is_open:
-                self.queryset=[restaurant for restaurant in self.queryset if restaurant.is_open()]
-
-        
-    def sortqueryset(self):
-                sort_order=self.form.cleaned_data.get('sort_order')
-                if sort_order:
-                    if sort_order=='high to low':
-                        self.queryset=self.queryset.order_by(f'-{self.sort_by}')
-                    if sort_order=='low to high':
-                        self.queryset=self.queryset.order_by(self.sort_by)
-                else:
-                    self.queryset=self.queryset.order_by('-created_at')
-
+    filterset_class=RestaurantFilter
 
     def get_queryset(self):
-        self.queryset=Restaurant.objects.all()
-        self.form= RestaurantFilterForm(self.request.GET)
-
-        if self.form.is_valid():
-            self.collectformdata()
-            if self.sort_by:
-                self.sortqueryset()
-            self.filterqueryset()
-
-        return self.queryset                
+        queryset=Restaurant.objects.all()
+        self.filterset=self.filterset_class(self.request.GET,queryset=queryset, request=self.request)
+        return self.filterset.qs
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
