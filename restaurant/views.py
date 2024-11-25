@@ -21,6 +21,7 @@ class RestaurantListView(ListView):
     template_name='restaurant/restaurant_list.html'
     context_object_name='restaurants'
     filterset_class=RestaurantFilter
+    paginate_by=5
 
     def get_queryset(self):
         queryset=Restaurant.objects.all()

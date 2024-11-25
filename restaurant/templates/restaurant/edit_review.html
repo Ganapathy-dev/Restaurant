@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="bg-white p-6 rounded-lg shadow-lg max-w-xl mx-auto m-12">
-    <h2 class="text-2xl font-semibold mb-4">Edit Your Review</h2>
+    <h2 class="text-lg font-semibold mb-4">Edit Your Review</h2>
     <form method="POST" action="">
         {% csrf_token %}
         
@@ -75,16 +75,16 @@
 
         <!-- Comment -->
         <div class="mb-4">
-            <label for="comment" class="block text-gray-700 font-medium mb-2">Your Comment:</label>
+            <label for="comment" class="block text-gray-700 text-sm font-medium mb-2">Your Comment:</label>
             <textarea id="comment" name="comment" rows="4" class="w-full p-2 border rounded-lg focus:outline-none focus:ring focus:ring-gray-300" placeholder="Write your comment here..." required>{{ form.instance.comment|default:'' }}</textarea>
         </div>
 
         <!-- Submit Button -->
         <div class="mt-6">
-            <button type="submit" class="bg-[#92B53D] hover:bg-[#A7C95A] text-white font-bold py-2 px-4 rounded ">
+            <button type="submit" class="bg-[#92B53D] hover:bg-[#A7C95A] text-white font-bold py-2 px-4 rounded text-sm ">
                 Update Review
             </button>
-            <a href="{% url 'restaurant_detail' pk=object.restaurant.pk %}" class="bg-[#92B53D] hover:bg-[#A7C95A] text-white font-bold py-2 px-4 rounded ">
+            <a href="{% url 'restaurant_detail' pk=object.restaurant.pk %}" class="bg-[#92B53D] hover:bg-[#A7C95A] text-white text-sm font-bold py-2 px-4 rounded ">
                 Cancel
             </a>
         </div>

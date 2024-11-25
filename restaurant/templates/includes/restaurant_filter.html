@@ -1,6 +1,6 @@
 
 <form method="GET" class="space-y-2 p-1 bg-white">
-    <p class="flex justify-between items-center font-semibold text-lg ">Filters <i class="fa-solid fa-filter" style="color: #323941;"></i></p>
+    <p class="flex justify-between items-center font-semibold text-sm ">Filters <i class="fa-solid fa-filter" style="color: #323941;"></i></p>
 
 
     <div x-data="{ 
@@ -13,7 +13,7 @@
 
     <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
         
-        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left text-[#323941] text-lg  select-none font-semibold hover:bg-gray-100">
+        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left text-[#323941] text-sm  select-none font-semibold hover:bg-gray-100">
             <span>City</span>
             <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
@@ -31,7 +31,7 @@
     </div>
 
     <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
-        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-lg font-semibold hover:bg-gray-100">
+        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-sm font-semibold hover:bg-gray-100">
             <span>Food Type</span>
             <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
@@ -50,7 +50,7 @@
     </div>
 
     <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
-        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-lg font-semibold hover:bg-gray-100">
+        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-sm font-semibold hover:bg-gray-100">
             <span>Cusisine</span>
             <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
@@ -68,7 +68,7 @@
     </div>
 
     <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
-        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-lg font-semibold hover:bg-gray-100">
+        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-sm font-semibold hover:bg-gray-100">
             <span>Rating</span>
             <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
@@ -83,7 +83,7 @@
 
 
     <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
-        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-lg font-semibold hover:bg-gray-100">
+        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-sm font-semibold hover:bg-gray-100">
             <span>Cost for Two</span>
             <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
@@ -97,7 +97,7 @@
     </div>
     </div>
 
-    <p class="flex justify-between items-center font-semibold text-lg ">Sortable <i class="fa-solid fa-sort" style="color: #323941;"></i></p>
+    <p class="flex justify-between items-center font-semibold text-sm ">Sortable <i class="fa-solid fa-sort" style="color: #323941;"></i></p>
     <div x-data="{ 
         activeAccordion: '', 
         setActiveAccordion(id) { 
@@ -107,7 +107,7 @@
 
 
     <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
-        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-lg font-semibold hover:bg-gray-100">
+        <button type="button" @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none text-[#323941] text-sm font-semibold hover:bg-gray-100">
             <span>Sorting</span>
             <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
@@ -129,14 +129,14 @@
     <div class="flex items-center space-x-2 p-2">
         <input type="checkbox" name="is_open" id="is_open" class="h-5 w-5 border-gray-300 rounded focus:ring-[#92B53D]"
                {% if request.GET.is_open %}checked{% endif %}>
-        <label for="is_open" class="text-[#323941] text-lg font-semibold">Currently Open</label>
+        <label for="is_open" class="text-[#323941] text-sm font-semibold">Currently Open</label>
     </div>
 
 
 
     <!-- Submit Button -->
     <div class="flex justify-center items-center">
-        <button type="submit" class="w-[80%] py-3 bg-[#92B53D] hover:bg-[#A7C95A] text-white rounded-lg ">
+        <button type="submit" class="w-[80%] py-2 bg-[#92B53D] hover:bg-[#A7C95A] text-white rounded-lg text-sm">
             Apply Filters
         </button>
     </div>
@@ -144,7 +144,7 @@
 
 <!-- Clear Filters Button -->
 <div class="text-center mt-6">
-    <a href="{% url 'restaurant_list' %}" class="w-[80%] inline-block px-6 py-2 bg-[#323941] hover:bg-[#4a5568] text-white rounded-lg">
+    <a href="{% url 'restaurant_list' %}" class="w-[80%] inline-block px-6 py-2 bg-[#323941] hover:bg-[#4a5568] text-white text-sm rounded-lg">
         Reset
     </a>
 </div>

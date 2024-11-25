@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="flex justify-center ">
-    <div class="filter w-[20%] h-full border-r border-gray-300 bg-white shadow-lg p-2 pb-[100px] fixed left-0 overflow-auto ">
-      {% include 'includes/restaurant_filter.html' %}
+<div class="flex flex-col md:flex-row">
+    <!-- Filter Section -->
+    <div class="filter w-full md:w-[25%] lg:w-[20%] h-screen border-r border-gray-300 bg-white shadow-lg p-4 pb-[80px] fixed top-[80px] md:top-[80px] overflow-auto">
+        {% include 'includes/restaurant_filter.html' %}
     </div>
 
-    <div class="flex justify-center flex-wrap gap-6 px-4 py-8 w-[80%] h-screen overflow-auto fixed left-[20%] pb-[120px]">
-      {% include 'includes/restaurant_cards.html' %}
+    <!-- Restaurant Cards Section -->
+    <div class="w-full md:w-[75%] lg:w-[80%] ml-0 md:ml-[25%] lg:ml-[20%] py-4 pt-[80px] md:pt-[20px] overflow-auto">
+        <div class="flex justify-center flex-wrap gap-4">
+            {% include 'includes/restaurant_cards.html' %}
+        </div>
     </div>
-  </div>
+</div>
+<div class="pt-2 pr-2 flex item-center justify-end">
+{% include 'includes/pagination.html' %}
+</div>
 {% endblock %}
-
-
-
