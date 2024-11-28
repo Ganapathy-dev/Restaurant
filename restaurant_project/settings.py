@@ -16,19 +16,22 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from dotenv import load_dotenv
+env_path=load_dotenv(os.path.join(BASE_DIR,'.env'))
+load_dotenv(env_path)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5l2v(3myq=ne+s_-ho(npwu(5#1asoa)=+snugq9nphh&nk9u2'
+SECRET_KEY =os.environ.get('DJANGO_SECRET_KEY','django-insecure-5l2v(3myq=ne+s_-ho(npwu(5#1asoa)=+snugq9nphh&nk9u2')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =os.environ.get('DJANGO_DEBUG','') !='False'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['Ganapathy.pythonanywhere.com','127.0.0.1']
+CSRF_TRUSTED_ORIGINS=['https://Ganapathy.pythonanywhere.com']
 
 # Application definition
 
@@ -46,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -120,8 +124,8 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT=os.path.join(BASE_DIR,'static/')
+# STATIC_URL = 'static/'
+# STATIC_ROOT=os.path.join(BASE_DIR,'static/')
 
 MEDIA_URL='media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media/')
@@ -136,3 +140,14 @@ LOGIN_REDIRECT_URL = 'restaurant_list'
 LOGOUT_REDIRECT_URL = 'restaurant_list'
 LOGIN_URL = 'user_login'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+import dj_database_url
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=500,
+        conn_health_checks=True,
+    )
+
+STATIC_ROOT=BASE_DIR / 'staticfiles'
+STATIC_URL='/static/'
