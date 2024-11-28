@@ -1,15 +1,18 @@
-from django.views.generic import ListView,DeleteView
+from django.views.generic import ListView,DetailView,UpdateView
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from .models import Restaurant, BookmarkedRestaurant, VisitedRestaurant
-from .forms import RestaurantFilterForm,ReviewForm
+from django.contrib.auth.models import User
+from .forms import RestaurantFilterForm,ReviewForm,UserRegistrationForm
 from django.db.models.functions import Upper
 from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from .filters import RestaurantFilter
+from django.contrib.auth import login
+from django.views.generic.edit import FormView
 # Create your views here.
 
 class RestaurantListView(ListView):
@@ -30,7 +33,7 @@ class RestaurantListView(ListView):
         return context
     
 
-class RestaurantDetailView(DeleteView):
+class RestaurantDetailView(DetailView):
      model=Restaurant
      template_name='restaurant/restaurant_detail.html'
      context_object_name='restaurant'
@@ -94,3 +97,21 @@ class ToggleVisitedView(LoginRequiredMixin,View):
 
         return JsonResponse({'is_visited': is_visited})
 
+class UserRegistrationView(FormView):
+    template_name='accounts/user_registration.html'
+    form_class=UserRegistrationForm
+    success_url=reverse_lazy('restaurant_list')
+
+    def form_valid(self, form):
+        user=form.save()
+        login(self.request, user)
+        return super().form_valid(form)
+
+class UserProfileUpdateView(LoginRequiredMixin,UpdateView):
+    model=User
+    fields=('first_name','last_name','email',)
+    template_name='accounts/user_profile.html'
+    success_url=reverse_lazy('my_profile')
+
+    def get_object(self):
+        return self.request.user
