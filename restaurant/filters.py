@@ -11,6 +11,7 @@ class RestaurantFilter(django_filters.FilterSet):
     rating=django_filters.NumberFilter(field_name='rating',lookup_expr='gte')
     cost_of_two=django_filters.NumberFilter(field_name='cost_of_two',lookup_expr='gte')
     is_open=django_filters.CharFilter(method='filter_is_open')
+    search = django_filters.CharFilter(method='filter_search')
 
     sort_by=django_filters.OrderingFilter(
         fields=(
@@ -51,3 +52,9 @@ class RestaurantFilter(django_filters.FilterSet):
             )
         return queryset
     
+    def filter_search(self, queryset, name, value):
+        return queryset.filter(
+            Q(title__icontains=value) | 
+            Q(cuisines__icontains=value) |
+            Q(location__icontains=value)
+        )

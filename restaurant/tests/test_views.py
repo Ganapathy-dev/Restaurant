@@ -80,6 +80,81 @@ class RestaurantListViewTests(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(response.context['restaurants']), 1)
 
+class RestaurantSearchTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.testuser=User.objects.create_user(username='testuser1',email='testuser1@gmail.com',password='user1@123')
+        cls.restaurant1 = Restaurant.objects.create(
+            owner=cls.testuser,
+            title="Pizza Place", 
+            location="New York", 
+            food_type='non_veg',
+            cuisines=["Italian"], 
+        )
+        cls.restaurant2 = Restaurant.objects.create(
+            owner=cls.testuser,
+            title="Sushi World", 
+            location="San Francisco",
+            food_type='non_veg', 
+            cuisines=["Japanese"], 
+        )
+        cls.restaurant3 = Restaurant.objects.create(
+            owner=cls.testuser,
+            title="Veggie Delight", 
+            food_type='veg',
+            location="New York", 
+            cuisines=["American"], 
+        )
+
+    def test_search_by_title(self):
+        response = self.client.get(reverse('restaurant_list'), {'search': 'Pizza'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pizza Place")
+        self.assertNotContains(response, "Sushi World")
+
+    def test_search_by_cuisine(self):
+        response = self.client.get(reverse('restaurant_list'), {'search': 'Japanese'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sushi World")
+        self.assertNotContains(response, "Veggie Delight")
+
+    def test_search_by_location(self):
+        response = self.client.get(reverse('restaurant_list'), {'search': 'New York'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pizza Place")
+        self.assertContains(response, "Veggie Delight")
+        self.assertNotContains(response, "Sushi World")
+
+    def test_search_case_insensitivity(self):
+        response = self.client.get(reverse('restaurant_list'), {'search': 'sushi'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sushi World")
+
+    def test_empty_search_query(self):
+        response = self.client.get(reverse('restaurant_list'), {'search': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pizza Place")
+        self.assertContains(response, "Sushi World")
+        self.assertContains(response, "Veggie Delight")
+
+    def test_search_no_results(self):
+        response = self.client.get(reverse('restaurant_list'), {'search': 'Steak'})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Pizza Place")
+        self.assertNotContains(response, "Sushi World")
+        self.assertNotContains(response, "Veggie Delight")
+        self.assertContains(response, "No Restaurant Found")
+
+    def test_search_with_filters(self):
+        response = self.client.get(reverse('restaurant_list'), {
+            'search': 'New York', 
+            'food_type': 'veg'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Veggie Delight")
+        self.assertNotContains(response, "Pizza Place")
+
+
 class DetailViewTestDataSetUp(TestCase):
     @classmethod
     def setUpTestData(cls):

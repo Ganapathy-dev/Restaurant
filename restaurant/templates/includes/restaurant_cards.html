@@ -4,7 +4,7 @@
         {% for restaurant in restaurants %}
         <a href="{% url 'restaurant_detail' restaurant.id %}">
           <div class="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-[230px] h-[275px]">
-            <div class="relative flex justify-center items-center">
+            <div class="flex justify-center items-center">
               {% if restaurant.images.first.image.url %}
               <img src="{{ restaurant.images.first.image.url }}" alt="Restaurant Image" class="w-[250px] h-[180px]" />
               {% else %}
