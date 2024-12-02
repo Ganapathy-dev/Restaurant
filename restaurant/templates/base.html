@@ -29,7 +29,7 @@
 
     <body class="bg-gray-100">
         <nav class="fixed top-0 w-full bg-[#323941] p-4 z-50 h-[80px] cursor-pointer flex justify-center items-center">
-            <div class='flex items-center justify-between w-full px-6'>
+            <div class='flex items-center justify-between w-full md:px-6 sm:px-0'>
 
                 <div class='flex flex-row items-center gap-10'>
                     <a href="#">
@@ -42,7 +42,7 @@
 
                 
 
-                <div class="md:flex space-x-8 text-sm font-medium text-white">
+                <div class="md:flex md:space-x-8 sm:space-x-4 sm:text-xs md:text-sm font-medium text-white">
                     <a href="{% url 'restaurant_list' %}" class="text-white hover:text-gray-300">Restaurants</a> 
                     <a href="{% url 'spotlight_restaurants' %}" class="text-white hover:text-gray-300">Spotlights</a> 
                     {% if user.is_authenticated %}
@@ -54,13 +54,13 @@
                 {% if user.is_authenticated %}
 
                 <!--dropdown-->
-                <div class="pr-8">
+                <div class="pr-8 sm:pr-4">
                     <div x-data="{
                         dropdownOpen: false
                     }"
                     class="relative">
                 
-                    <button @click="dropdownOpen=true" class="inline-flex items-center justify-center py-2 pl-3 pr-10 text-lg md:text-xs font-medium transition-colors bg-white border rounded-md text-neutral-700 hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none disabled:opacity-50 disabled:pointer-events-none">
+                    <button @click="dropdownOpen=true" class="inline-flex items-center justify-center md:py-2 md:pl-3 md:pr-10 md:text-lg sm:py-1 sm:text-xs sm:pl-2 sm:pr-8 md:text-sm font-medium transition-colors bg-white border rounded-md text-neutral-700 hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none disabled:opacity-50 disabled:pointer-events-none">
                             <span>{{ user.get_username | capitalize_first }}</span>
                         </span>
                         <svg class="absolute right-0 w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" /></svg>          
